@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+  <meta charset="utf-8">
+  <title>Flask Assignment</title>
+  <link href="{{url_for('static', filename = 'css/bootstrap.min.css')}}" rel="stylesheet">
+
+</head>
+
+<body>
+  {% block body %}
+
+  <div class="container">
+    <div class="well text-center">
+      <h1>Flask Assignment Web Application Development</h1>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col md-12">
+          <h2>Add User Data<button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#mymodal" name="button">Add User</button> </h2>
+
+
+
+              <!--Start Add User Data-->
+              <div id="mymodal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Please Insert User Data</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{url_for('insert')}}" method="POST">
+                        <div class="form-group">
+                          <label>ID</label>
+                          <input type="text" class="form-control" name="id" required="1">
+                        </div>
+                        <div class="form-group">
+                          <label>User Name</label>
+                          <input type="text" class="form-control" name="user" required="1">
+                        </div>
+                        <div class="form-group">
+                          <label>Phone Number</label>
+                          <input type="text" class="form-control" name="number" required="1">
+                        </div>
+
+                        <div class="form-group">
+                          <button class="btn btn-primary" type="submit">Insert Data</button>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--End Add USer Data-->
+
+
+              {% with messages = get_flashed_messages() %}
+
+              {% if messages %}
+
+              {% for message in messages %}
+
+              <div class="alert alert-success alert-dismissable" role="alert">
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+                  <span aria-hidden="true">&times;</span>
+
+                </button>
+                {{message}}
+
+
+              </div>
+
+
+              {%endfor%}
+              {%endif%}
+              {%endwith%}
+
+
+
+
+
+          <table class="table table-striped">
+            <tr>
+              <th>ID</th>
+              <th>User</th>
+              <th>Number</th>
+              <th>Action</th>
+            </tr>
+
+            {% for row in user %}
+            <tr>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>  <a href="/update/{{row.2}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a> </td>
+            </tr>
+
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+{% for row in user %}
+      <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Update Information</h4>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('update') }}" method="POST">
+                <div class="form-group">
+                  <label>Number</label>
+                  <input type="hidden" name="number" value="{{row.2}}">
+                  <input type="text" class="form-control" name="number" value="{{row.2}}">
+                </div>
+
+
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit">Update</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+    {% endblock %}
+
+
+  </div>
+</body>
+
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+<script type="text/javascript" src="{{url_for('static', filename = 'js/bootstrap.min.js')}}"></script>
+
+</html>
